@@ -705,7 +705,7 @@ class Cube {
     if ( this.size === 2 ) this.scale = 1.25;
     else if ( this.size === 3 ) this.scale = 1;
     else if ( this.size > 3 ) this.scale = 3 / this.size;
-
+    else if ( this.size === 1) this.scale = 2
     this.object.scale.set( this.scale, this.scale, this.scale );
 
     const controlsScale = this.size === 2 ? 0.825 : 1;
@@ -1648,6 +1648,7 @@ class Controls {
     }
 
     const converted = this.scramble.converted;
+
     const move = converted[ 0 ];
     const layer = this.getLayer( move.position );
 
@@ -1671,7 +1672,7 @@ class Controls {
       }
 
     } );
-
+    
   }
 
   getIntersect( position, object, multiple ) {
@@ -1798,6 +1799,7 @@ class Scrambler {
     this.dificulty = 0;
 
     this.scrambleLength = {
+      1: [ 1, 3, 5],
       2: [ 7, 9, 11 ],
       3: [ 20, 25, 30 ],
       4: [ 30, 40, 50 ],
@@ -2612,7 +2614,7 @@ class Preferences {
 
       size: new Range( 'size', {
         value: this.game.cube.size,
-        range: [ 2, 5 ],
+        range: [ 1, 5 ],
         step: 1,
         onUpdate: value => {
 
@@ -2942,6 +2944,12 @@ class Scores {
     this.game = game;
 
     this.data = {
+      1: {
+        scores: [],
+        solves: 0,
+        best: 0,
+        worst: 0,
+      },
       2: {
         scores: [],
         solves: 0,
@@ -2965,7 +2973,7 @@ class Scores {
         solves: 0,
         best: 0,
         worst: 0,
-      }
+      },
     };
 
   }
@@ -2999,7 +3007,7 @@ class Scores {
   calcStats() {
 
     const s = this.game.cube.sizeGenerated;
-    const data = this.data[ s ];
+    const data = this.data[s];
 
     this.setStat( 'cube-size', `${s}<i>x</i>${s}<i>x</i>${s}` );
     this.setStat( 'total-solves', data.solves );
@@ -3008,7 +3016,7 @@ class Scores {
     this.setStat( 'average-5', this.getAverage( 5 ) );
     this.setStat( 'average-12', this.getAverage( 12 ) );
     this.setStat( 'average-25', this.getAverage( 25 ) );
-
+    
   }
 
   setStat( name, value ) {
@@ -3708,7 +3716,7 @@ const HIDE = false;
 class Game {
 
   constructor() {
-
+    localStorage.clear()
     this.dom = {
       ui: document.querySelector( '.ui' ),
       game: document.querySelector( '.ui__game' ),
